@@ -161,7 +161,7 @@ function noNetConnection()
 
 function dump(data)
 {
-	//console.debug(data);
+	console.debug(data);
 }
 
 function setStorage(key,value)
@@ -535,7 +535,7 @@ function callAjax(action,params)
 				case "GetPendingOrders":
 				   displayOrders(data.details,'pending-orders');
 				break;
-				case "getNewPendingOrders":
+				case "GetPendingOrders":
 				   displayNewOrders(data.details,'newpending-orders');
 				break;
 
@@ -1067,7 +1067,7 @@ function getPendingOrders()
 	var params="token="+getStorage("merchant_token");
 	params+="&user_type="+info.user_type;
 	params+="&mtid="+info.merchant_id;
-	callAjax("getNewPendingOrders",params);
+	callAjax("GetPendingOrders",params);
 }
 function getGetAllOrders()
 {
