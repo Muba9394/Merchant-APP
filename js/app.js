@@ -1764,14 +1764,11 @@ function displayPrice(currency_position, currency ,price)
 
 //
 function printOrder(){
-	console.log(getStorage("merchant_info"));
-
 	if(getStorage("bt_con_dev")){
 		conDevice(getStorage("bt_con_dev"));
 	}else{
-		$('#popupdevice ul').empty().append(getStorage('device_list'));
 		$('#popupdevice, #popupdevice ons-dialog').show();
-
+		$('#popupdevice ul').empty().append(getStorage('device_list'));
 		//setPrinter();
 	}
 }
@@ -1800,8 +1797,9 @@ function setPrinter(){
     }
 
     bt.startScan(); // scan the devices and show the popup after 5 seconds
-    $('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
-    $('#popupdevice, #popupdevice ons-dialog').show();
+		$('#popupdevice, #popupdevice ons-dialog').show();
+		$('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
+
 
 
 
