@@ -167,6 +167,8 @@ var bluetooth = function ($q, $window) {
 
     //write function
     this.write = function (buffer, deviceId) {
+      alert(buffer);
+      alert(deviceId);
         var d = '';
         function successCallback(success) {
             alert(success);
