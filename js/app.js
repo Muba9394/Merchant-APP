@@ -206,6 +206,10 @@ $( document ).on( "keyup", ".numeric_only", function() {
 ons.bootstrap();
 ons.ready(function() {
 
+	$('#allorders-orders').on('scroll', function(){
+    	onsenAlert("ok");
+  });
+
 	dump("ready");
 	refreshConnection();
 	if (!empty(getStorage("merchant_token"))){
@@ -1101,9 +1105,15 @@ function getMerchantInfoStorage()
 	console.log(info);
 }
 
+$(window).scroll(function() {
+   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+       alert("bottom!");
+   }
+});
+
+
 function displayOrders(data,div_id)
 { //new-orders
-
 	var icon_trans_type=''; var icons=''; var icons2='';
 	var htm='';
 	$.each( data, function( key, val ) {
@@ -1749,6 +1759,10 @@ function displayPrice(currency_position, currency ,price)
 	}
 }
 
+//Loading
+
+
+//
 function printOrder(){
 	console.log(getStorage("merchant_info"));
 
@@ -1764,34 +1778,41 @@ function printOrder(){
 
 function printerStatus()
 {
-	var btPrinter="";
-	if(getStorage(bt_con_dev)) {
-		btPrinter = getStorage(bt_con_dev);
-	}
-	else {
-		btPrinter = "Offline";
-	}
-	$("#printer-name").val(btPrinter);
-	return btPrinter;
+    var btPrinter="";
+    if(getStorage("bt_con_dev")) {
+        btPrinter = getStorage("bt_con_dev");
+    }
+    else {
+        btPrinter = "Offline";
+    }
+    $("#printer-name").val(btPrinter);
+    return btPrinter;
 }
 
 function setPrinter(){
-	var bt = new bluetooth(0);
-	if(!bt.isEnabled()){	  bt.enable(); }
+    var bt = new bluetooth(0);
+    if(!bt.isEnabled()){bt.enable(); }
+    var connectedPrinter ="None";
+    if(getStorage("bt_con_dev")){
+        //alert("Printer is online"+getStorage("bt_con_dev"));
+        $("#printer-name").val(getStorage("bt_con_dev")); //this is not working right now. need to be fixed
+        connectedPrinter = getStorage("bt_con_dev");
+    }
 
-	if(getStorage("bt_con_dev")){
-		//alert("Printer is online"+getStorage("bt_con_dev"));
-		$("#printer-name").val(getStorage("bt_con_dev"));
-	}else{
-		var printers;
-		 printers = bt.startScan(); // scan the devices and show the popup after 5 seconds
-		 setTimeout(function(){
-			$('#popupdevice ul').empty().append(printers);
-			$('#popupdevice, #popupdevice ons-dialog').show();
-		},5000);
+    bt.startScan(); // scan the devices and show the popup after 5 seconds
+    $('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
+    $('#popupdevice, #popupdevice ons-dialog').show();
 
-	}
+
+
 }
+
+function savePrinter(printer) {
+    setStorage("bt_con_dev",printer);
+    $('#popupdevice ons-dialog').hide();
+
+}
+
 
 
 
