@@ -141,7 +141,6 @@ function onDeviceReady() {
 
 
 setStorage("device_platform", device.platform );
-
 }
 
 jQuery.fn.exists = function(){return this.length>0;}
@@ -1766,48 +1765,49 @@ function displayPrice(currency_position, currency ,price)
 function printOrder(){
 	if(getStorage("bt_con_dev")){
 		conDevice(getStorage("bt_con_dev"));
-	}else{
+	}
+	/*else{
+		$('#popupdevice ul').empty().append(getStorage('device_list'));
 		$('#popupdevice, #popupdevice ons-dialog').show();
 		$('#popupdevice ul').empty().append(getStorage('device_list'));
 		//setPrinter();
-	}
+	}*/
 }
 
 function printerStatus()
 {
-    var btPrinter="";
-    if(getStorage("bt_con_dev")) {
-        btPrinter = getStorage("bt_con_dev");
-    }
-    else {
-        btPrinter = "Offline";
-    }
-    $("#printer-name").val(btPrinter);
-    return btPrinter;
+	var btPrinter="";
+	if(getStorage("bt_con_dev")) {
+		btPrinter = getStorage("bt_con_dev");
+	}
+	else {
+		btPrinter = "Offline";
+	}
+	$("#printer-name").val(btPrinter);
+	return btPrinter;
 }
 
 function setPrinter(){
-    var bt = new bluetooth(0);
-    if(!bt.isEnabled()){bt.enable(); }
-    var connectedPrinter ="None";
-    if(getStorage("bt_con_dev")){
-        //alert("Printer is online"+getStorage("bt_con_dev"));
-        $("#printer-name").val(getStorage("bt_con_dev")); //this is not working right now. need to be fixed
-        connectedPrinter = getStorage("bt_con_dev");
-    }
+	var bt = new bluetooth(0);
+	if(!bt.isEnabled()){bt.enable(); }
+	var connectedPrinter ="None";
+	if(getStorage("bt_con_dev")){
+		//alert("Printer is online"+getStorage("bt_con_dev"));
+		$("#printer-name").val(getStorage("bt_con_dev")); //this is not working right now. need to be fixed
+		connectedPrinter = getStorage("bt_con_dev");
+	}
 
-    bt.startScan(); // scan the devices and show the popup after 5 seconds
-		$('#popupdevice, #popupdevice ons-dialog').show();
-		$('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
+	bt.startScan(); // scan the devices and show the popup after 5 seconds
 
-
+	$('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
+	$('#popupdevice, #popupdevice ons-dialog').show();
 
 
 }
 
 function savePrinter(printer) {
-    setStorage("bt_con_dev",printer);
-    $('#popupdevice ons-dialog').hide();
+	setStorage("bt_con_dev",printer);
+	$('#popupdevice ons-dialog').hide();
 
 }
 
@@ -1848,10 +1848,11 @@ else {
 	setTimeout(function(){
 			if(getStorage("bt_con_dev")){
 			conDevice(getStorage("bt_con_dev"));
-			}else{
+			}
+			/*else{
 				$('#popupdevice ul').empty().append(getStorage('device_list'));
 				$('#popupdevice, #popupdevice ons-dialog').show();
-			}
+			}*/
 		//setTimeout(function(){kNavigator.pushPage("displayOrder.html", '');},3000);
 	},4000);
 }
