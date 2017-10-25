@@ -1764,6 +1764,7 @@ function displayPrice(currency_position, currency ,price)
 //
 function printOrder(){
 	if(getStorage("bt_con_dev")){
+		alert(getStorage("bt_con_dev"));
 		conDevice(getStorage("bt_con_dev"));
 	}
 	/*else{

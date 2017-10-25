@@ -43,17 +43,18 @@ var _EscCommand = (function () {
 
 
 function conDevice(deviceId){
+  alert(deviceId);
 	var bt = new bluetooth(0);
-	if(!bt.isEnabled()){	  bt.enable(); }
+	if(!bt.isEnabled()){bt.enable(); }
 	setTimeout(function(){bt.connect();},2000);
 	/*if(!bt.isConnected()) {
 		alert("Printer is not connected/paired.");
 		return;
-		
+
 	}*/
 
 	//if(!getStorage("bt_con_dev")){
-    //	bt.connect(deviceId); 
+    //	bt.connect(deviceId);
     //$('#popupdevice ons-dialog').hide();
 	//	setStorage("bt_con_dev",deviceId);
 	//}
@@ -164,6 +165,10 @@ function conDevice(deviceId){
 	//setTimeout(function(){
 		var uint8array = new TextEncoder('utf-8', { NONSTANDARD_allowLegacyEncoding: true }).encode(print_dtl);
      bt.write(uint8array.buffer, deviceId,1);
+     if(bt.write)
+     {
+      alert("Printed") ;
+     }
 
   //},2000);
   setTimeout(function(){
