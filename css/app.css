@@ -686,14 +686,14 @@ line-height:normal;
 .delivery-icon .icon{
 background:#ccc;
 padding:17px;
-/*color:#fff; // commented by Raj, 17.10.17*/ 
+/*color:#fff; // commented by Raj, 17.10.17*/
 font-size:25px;
 }
 
 .rounded{
 -moz-border-radius: 2px;
 -webkit-border-radius: 2px;
-border-radius: 2px; 
+border-radius: 2px;
 -khtml-border-radius: 2px;
 }
 
@@ -785,7 +785,7 @@ font-weight:normal !important;
 /*fixed noty */
 
 #page-home .tab-bar .ons-icon,
-#page-home .tab-bar .tab-bar__button,  
+#page-home .tab-bar .tab-bar__button,
 #page-bookingHome .tab-bar .ons-icon,
 #page-bookingHome .tab-bar .tab-bar__button
 {
@@ -849,7 +849,7 @@ line-height:normal;
 }
 
 .tabs .tabicon{
-font-size:28px;
+font-size:25px;
 position:relative;
 z-index:9999;
 position:absolute;
@@ -960,7 +960,7 @@ padding:2px 5px !important;
 display:table;
 -moz-border-radius: 2px;
 -webkit-border-radius: 2px;
-border-radius: 2px; 
+border-radius: 2px;
 -khtml-border-radius: 2px;
 background:#f75d34;
 }
@@ -968,13 +968,13 @@ background:#f75d34;
 .status.cancelled,
 .status.decline,
 .status.declined,
-.status.denied  
+.status.denied
 {
 background:#f80905;
 }
 .status.successful,
 .status.paid,
-.status.approved 
+.status.approved
 {
 background:#2c9f2c;
 }
@@ -991,11 +991,11 @@ background:#33a17e ;
 {
 background:#1507cf;
 }
-.status.started 
+.status.started
 {
 background:#ba68c8;
 }
-.status.inprogress  
+.status.inprogress
 {
 background:#ec391c;
 }

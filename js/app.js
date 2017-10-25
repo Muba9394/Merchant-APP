@@ -20,7 +20,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 
 	navigator.splashscreen.hide();
-		
+
 	setStorage("device_platform", device.platform );
 	if ( !empty(krms_config.pushNotificationSenderid)) {
 		//			alert();
@@ -72,7 +72,7 @@ function onDeviceReady() {
 
 	        		case "booking":
 	        		//showNotificationBooking( data.title,data.message, data.additionalData.additionalData.booking_id );
-					setTimeout(function(){getNewBooking();},4000); 
+					setTimeout(function(){getNewBooking();},4000);
 	        		setStorage("notification_push_type", "booking");
 
 	        		var options = {
@@ -98,7 +98,7 @@ function onDeviceReady() {
 	        		/*showNotification( data.title,data.message, data.additionalData.additionalData.order_id );
 	        		setHome();
 	        		OrderRefresh();*/
-					setTimeout(function(){getNewPendingOrders();},4000); 
+					setTimeout(function(){getNewPendingOrders();},4000);
 	        		setStorage("notification_push_type", "order");
 
 	        		var options = {
@@ -161,7 +161,7 @@ function noNetConnection()
 
 function dump(data)
 {
-	console.debug(data);
+	//console.debug(data);
 }
 
 function setStorage(key,value)
@@ -205,7 +205,7 @@ $( document ).on( "keyup", ".numeric_only", function() {
 /*onsen ready*/
 ons.bootstrap();
 ons.ready(function() {
-	
+
 	dump("ready");
 	refreshConnection();
 	if (!empty(getStorage("merchant_token"))){
@@ -427,7 +427,7 @@ document.addEventListener("pageinit", function(e) {
 	   case "page-bookingtab":
 	      $(".tab-active-page").html( getTrans("Booking","booking") );
 	      $("#display-div").val('booking-pending');
-		
+
 	      var info=getMerchantInfoStorage();
 	      var params='';
 		  params+="&token="+getStorage("merchant_token");
@@ -535,7 +535,7 @@ function callAjax(action,params)
 				case "GetPendingOrders":
 				   displayOrders(data.details,'pending-orders');
 				break;
-				case "GetPendingOrders":
+				case "getNewPendingOrders":
 				   displayNewOrders(data.details,'newpending-orders');
 				break;
 
@@ -548,15 +548,15 @@ function callAjax(action,params)
 				break;
 
 				case "DeclineOrders":
-				onsenAlert(data.msg);	
-				toastMsg(data.msg);				   
+				onsenAlert(data.msg);
+				toastMsg(data.msg);
 				var options = {
 				   animation: 'none',
 				   onTransitionEnd: function() {
 				   }
 				 };
 				kNavigator.resetToPage('slidemenu.html',options);
-				
+
 				case "AcceptOrdes":
 					if(getStorage("bt_con_dev")){
 						conDevice(getStorage("bt_con_dev"));
@@ -573,7 +573,7 @@ function callAjax(action,params)
 				    };
 					notyAlert(data.msg,'error');
 					kNavigator.resetToPage('slidemenu.html',options);
-					
+
 				break;
 
 				case "StatusList":
@@ -770,8 +770,14 @@ function callAjax(action,params)
 			    break;
 
 			    case "assignTask":
-				   onsenAlert(data.msg);	
+				   onsenAlert(data.msg);
 			       toastMsg(data.msg);
+						 var options = {
+		 				   animation: 'none',
+		 				   onTransitionEnd: function() {
+		 				   }
+		 				 };
+		 				kNavigator.resetToPage('slidemenu.html',options);
                    //kNavigator.popPage({cancelIfRunning: true});
 			    break;
 
@@ -904,8 +910,8 @@ function login()
         onError : function() {
         },
         onSuccess : function() {
-          var params = $("#frm-login").serialize(); 
-          var split_params = params.split("&"); 
+          var params = $("#frm-login").serialize();
+          var split_params = params.split("&");
           params = '';
           for(var i=0;i<split_params.length;i++){
               var sub_params = split_params[i].split("=");
@@ -913,7 +919,7 @@ function login()
               params += sub_params[0]+"="+window.btoa(sub_params[1])+"&";
               else
               params += split_params[i]+"&";
-          } 
+          }
           params+="merchant_device_id="+getStorage("merchant_device_id");
           callAjax("login",params);
           return false;
@@ -1067,7 +1073,7 @@ function getPendingOrders()
 	var params="token="+getStorage("merchant_token");
 	params+="&user_type="+info.user_type;
 	params+="&mtid="+info.merchant_id;
-	callAjax("GetPendingOrders",params);
+	callAjax("getNewPendingOrders",params);
 }
 function getGetAllOrders()
 {
@@ -1085,18 +1091,19 @@ function getNewBooking(){
 	  params+="&token="+getStorage("merchant_token");
 	  params+="&user_type="+info.user_type;
 	  params+="&mtid="+info.merchant_id;
-	  callAjax('PendingBookingTab',params);	
+	  callAjax('PendingBookingTab',params);
 }
 
 function getMerchantInfoStorage()
 {
 	var info =  JSON.parse( getStorage("merchant_info") );
 	return info;
+	console.log(info);
 }
 
 function displayOrders(data,div_id)
 { //new-orders
-	
+
 	var icon_trans_type=''; var icons=''; var icons2='';
 	var htm='';
 	$.each( data, function( key, val ) {
@@ -1196,7 +1203,7 @@ function displayNewOrders(data,div_id)
 		row_cnt++;
 	}
 	});
-	
+
 	if(row_cnt==1){
 		$(".pulse").hide();
 		$(".main-home-tab").css('top','0px');clearTimeout(altpopup);
@@ -1219,7 +1226,7 @@ function getOrderIcons(status_raw)
 	icons2='';
 	switch (status_raw)
 	{
-		case "decline" : 
+		case "decline" :
 		case "Declined" :
 		case "declined":
 	    icons='ion-close-circled';
@@ -1307,6 +1314,7 @@ function viewOrder(order_id)
       	 $("#order-details-page-title").html( getTrans("Getting order details..",'getting_order_details') );
 
       	 var info=getMerchantInfoStorage();
+				 console.log(info);
 		 var params="token="+getStorage("merchant_token");
 	 	 params+="&user_type="+info.user_type;
 	 	 params+="&mtid="+info.merchant_id;
@@ -1363,7 +1371,7 @@ function displayOrderDetails(data)
 	var icons=getOrderIcons(data.status_raw);
 
 	if(data.status_raw=="assigned")
-	{		
+	{
 		$("#reassigned").val("true");
 	}
 	$(".trans_type").val( data.trans_type_raw ) ;
@@ -1473,7 +1481,7 @@ function displayOrderDetails(data)
      html+='</ons-list-header>';
 
      if (!empty(data.item)){
-     	$.each( data.item , function( key, val ) { 
+     	$.each( data.item , function( key, val ) {
 			if(val.item_name != null){
      		  //dump(val);
      		  var price=val.normal_price;
@@ -1601,12 +1609,12 @@ function displayOrderDetails(data)
      // button d2
 	 //console.log("Status"+data.status_raw);
 	 //console.log("Deriver "+data.driver_app);
-	 
+
      if ( data.status_raw=="pending"){
      	$(".actions-1").show(); //Accept & Decline
      	$(".actions-2").hide(); //Change, Print & Assign
      	$(".actions-3").hide(); //Change & Assign
-     	$(".actions-4").hide(); //Change & Track(disabled) 
+     	$(".actions-4").hide(); //Change & Track(disabled)
      	$(".actions-5").hide(); //Change , Print & Reassign
      }
 	else if ( data.status_raw=="assigned"){
@@ -1629,7 +1637,7 @@ function displayOrderDetails(data)
 			$(".actions-2").hide();
 			$(".actions-3").hide();
 			$(".actions-4").show();
-			$(".actions-5").hide();	
+			$(".actions-5").hide();
 		 }
 		 else if ( data.driver_app==1){
 
@@ -1742,12 +1750,14 @@ function displayPrice(currency_position, currency ,price)
 }
 
 function printOrder(){
+	console.log(getStorage("merchant_info"));
+
 	if(getStorage("bt_con_dev")){
 		conDevice(getStorage("bt_con_dev"));
 	}else{
 		$('#popupdevice ul').empty().append(getStorage('device_list'));
 		$('#popupdevice, #popupdevice ons-dialog').show();
-		
+
 		//setPrinter();
 	}
 }
@@ -1779,7 +1789,7 @@ function setPrinter(){
 			$('#popupdevice ul').empty().append(printers);
 			$('#popupdevice, #popupdevice ons-dialog').show();
 		},5000);
-		
+
 	}
 }
 
@@ -1793,9 +1803,9 @@ if(time == "")
 	onsenAlert("Please enter the collection time for this Order");
 }
 else {
-	clearTimeout(altpopup); 
+	clearTimeout(altpopup);
 	//alert(getStorage("device_list"));
-	
+
 	$.validate({
 	    form : '#frm-acceptorder',
 	    borderColorOnError:"#FF0000",
@@ -1813,9 +1823,9 @@ else {
 	      return false;
 	    }
 	});
-	
-	
-	
+
+
+
 	setTimeout(function(){
 			if(getStorage("bt_con_dev")){
 			conDevice(getStorage("bt_con_dev"));
@@ -1828,7 +1838,7 @@ else {
 }
 
 
- setTimeout(function(){kNavigator.pushPage("home.html", '');},1000);
+ //setTimeout(function(){kNavigator.pushPage("home.html", '');},1000);
 }
 
 function declineOrder()
@@ -2955,7 +2965,7 @@ function playAudio(url) {
     my_media.play();
 }
 
-	function playNewNotification(){ 
+	function playNewNotification(){
 	 var sound_url= "file:///android_asset/www/audio/fb-alert.mp3";
 	 //var sound_url= "file:///C:/dev/merchant/audio/fb-alert.mp3"; //For firefox testing
 	 dump(sound_url);
@@ -3019,7 +3029,7 @@ function showTeamList()
 }
 
 function showDriverList()
-{ 
+{
 	/*if ( $(".team_id").val()==""){
 		toastMsg( getTrans('Please select a team','select_team')  );
 		return;
@@ -3090,23 +3100,23 @@ function setDriver(driver_id, driver_name)
 	//$(".driver_selected").html( driver_name );
 	if($("#reassigned").val())
 		  {
-			var info=getMerchantInfoStorage();  
+			var info=getMerchantInfoStorage();
 			var params = "team_id=1&driver_id="+driver_id+"&reassigned=true";
 			params+="&mtid="+info.merchant_id;
 			params+="&order_id="+$(".order_id").val();
-			callAjax("assignTask",params); 
-			driverListDialog.hide();			
+			callAjax("assignTask",params);
+			driverListDialog.hide();
 			return false;
 		  }
-		  else{	
+		  else{
 				var info=getMerchantInfoStorage();
 				var params = "team_id=1&driver_id="+driver_id;
 				params+="&mtid="+info.merchant_id;
 				params+="&order_id="+$(".order_id").val();
-				callAjax("assignTask",params);	
+				callAjax("assignTask",params);
 				driverListDialog.hide();
 				return false;
-		  }	
+		  }
 }
 
 function assignTask()
@@ -3118,13 +3128,13 @@ function assignTask()
 	    },
 	    onSuccess : function() {
 	      var info=getMerchantInfoStorage();
-		  
+
 	      var params = $( "#frm-assigntask").serialize();
 	      params+="&mtid="+info.merchant_id;
 	      params+="&order_id="+$(".order_id").val();
 	      callAjax("assignTask",params);
 		  return false;
-		  
+
 	    }
 	});
 }
@@ -3531,14 +3541,14 @@ function color() {
 	red = Math.floor((r1 + m) * 255);
 	green = Math.floor((g1 + m) * 255);
 	blue = Math.floor((b1 + m) * 255);
- 
+
  // $(".flashing-banner").css('backgroundColor', 'rgba(' + red + ',' + green + ',' + blue + ',' + 1 + ')'); // commented on 21.10.17
   hue++;
 }
 window.setInterval(color, 10);
 
-$(document).on('click','ons-back-button',function(){ 
+$(document).on('click','ons-back-button',function(){
 	if($(this).parent().parent().parent().attr('id') == "page-bookingView"){
-		setTimeout(function(){getNewBooking();},2000); 
+		setTimeout(function(){getNewBooking();},2000);
 	}
 });

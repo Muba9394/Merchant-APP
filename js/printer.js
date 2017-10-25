@@ -1,7 +1,7 @@
   var bt ='';
 
 
-  var bluetooth = function ($q, $window) { 
+  var bluetooth = function ($q, $window) {
     var _this = this;
     var serviceUUID = "49535343-FE7D-4AE5-8FA9-9FAFD205E455";// IOS ONLY
     var writeCharacteristic = "49535343-8841-43F4-A8D4-ECBE34729BB3"; //IOS ONLY
@@ -13,20 +13,20 @@
       }
       function errorCallback(error) {
         d = false;
-      } 
+      }
       if (getStorage("device_platform") == "IOS") {
         ble.isEnabled(successCallback, errorCallback);
-      } else if (getStorage("device_platform") == "Android") { 
+      } else if (getStorage("device_platform") == "Android") {
         bluetoothSerial.isEnabled(successCallback, errorCallback);
       }
 
       return d;
     }
-    this.enable = function () { 
+    this.enable = function () {
       var d = '';
       if (getStorage("device_platform") == "IOS") {
         d = "not support";
-      } else if (getStorage("device_platform") == "Android") { 
+      } else if (getStorage("device_platform") == "Android") {
         bluetoothSerial.enable(function (success) {
           d = success;
         }, function (error) {
@@ -35,11 +35,11 @@
       }
       return d;
     }
-   
+
 
     //startScan() author: Raj Kovi 22.10.17
     this.startScan = function () {
-      
+
       var d = [];
       var dups = [];
 
@@ -55,37 +55,37 @@
 
           bluetoothSerial.setDeviceDiscoveredListener(function (device) {
               d.push(device);
-              
+
           });
 
-          
+
           var arr = d.filter(function(el) {
             // If it is not a duplicate, return true
             if (dups.indexOf(el.id) == -1) {
               dups.push(el.id);
               return true;
             }
-          
+
             return false;
-            
+
           });
 
           var html = '';
-          
-          
+
+
           for (var i = 0, len = dups.length; i < len; i++) {
               html += '<li onclick="conDevice(\'' + dups[i].id + '\');" style="padding:10px;">' + dups[i].name + '</li>';
           }
-          
+
           setStorage("device_list", html);
-         
+
       }
 
       //  alert(getStorage('device_list'));
 
       return dups;
   }
-   
+
    /* this.startScan = function () {
 		var html = '';
       var d = new Array;
@@ -97,7 +97,7 @@
         });
       } else if (getStorage("device_platform") == "Android") {
         bluetoothSerial.setDeviceDiscoveredListener(function (device) {
-          d.push(device); 
+          d.push(device);
 		  html += '<li onclick="conDevice(\''+device.id+'\');" style="padding:10px;">'+device.name+'</li>';
 		 setStorage("device_list",html);
         });
@@ -185,7 +185,7 @@
     this.write = function (buffer, deviceId,rl) {
       var d = '';
       function successCallback(success) {
-        alert(success);	
+        alert(success);
       }
       function errorCallback(error) {
         alert(error);
@@ -250,7 +250,7 @@ document.addEventListener("deviceready", function(){
   }
 
 bt.startScan();
-   
+
 var Esc = new _EscCommand();
 
 }, false);
@@ -298,7 +298,7 @@ function conDevice(deviceId){
 					var newresult = str.replace(/.{20}\S*\s+/g, "$&@").split(/\s+@/);
 					tol_space = 32 -$(newresult).last()[0].length;
 			}
-			
+
 			for(var j=0;j<tol_space;j++){
 				tol_spaces +=empty_space;
 			}
@@ -371,9 +371,13 @@ function conDevice(deviceId){
 	print_dtl += Esc.InitializePrinter+Esc.DoubleOn+Esc.TextAlignCenter+"Kitchen COPY\n" + Esc.DoubleOff +kit_dtl + kit_copy +"\n\n"+ Esc.PrintAndFeedMaxLine + Esc.LF + Esc.FullCutPaper+Esc.LF;
 	//setTimeout(function(){
 		var uint8array = new TextEncoder('utf-8', { NONSTANDARD_allowLegacyEncoding: true }).encode(print_dtl);
-     bt.write(uint8array.buffer, deviceId,1);	
-	 
-  //},2000);
-  setTimeout(function(){window.location.reload();},2000);
-}
+     bt.write(uint8array.buffer, deviceId,1);
 
+  //},2000);
+  setTimeout(function(){
+  	kloader.show();
+  	 var options = {animation: 'none',onTransitionEnd: function() {}};
+  	 kNavigator.resetToPage('slidemenu.html',options);
+   },2000);
+
+}
