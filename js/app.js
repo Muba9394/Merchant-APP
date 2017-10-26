@@ -1795,7 +1795,7 @@ function savePrinter(printer) {
 	setStorage("bt_con_dev",printer);
 	$('#popupdevice ons-dialog').hide();
 	//do a test printing
-	printorder(); //just for testing
+	printOrder(); //just for testing
 
 }
 
