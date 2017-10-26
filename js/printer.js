@@ -29,7 +29,7 @@ var bluetooth = function ($q, $window) {
         return d;
     }
 
-   
+
 
     this.startScan = function () {
 	  var html = '';
@@ -44,7 +44,7 @@ var bluetooth = function ($q, $window) {
         bluetoothSerial.setDeviceDiscoveredListener(function (device) {
           d.push(device);
           html += '<li onclick="savePrinter(\''+device.id+'\');" style="padding:10px;">'+device.name+'</li>';
-         
+
         });
         bluetoothSerial.discoverUnpaired(function (devices) {
           d.push(devices);
@@ -115,7 +115,7 @@ var bluetooth = function ($q, $window) {
     }
 
     //write function
-    this.write = function (buffer, deviceId) {            
+    this.write = function (buffer, deviceId) {
         var d = '';
         function successCallback(success) {
             alert(success);
@@ -130,8 +130,8 @@ var bluetooth = function ($q, $window) {
         return d;
     }
 };
- 
- 
+
+
  // Print content object
 
 var _EscCommand = (function () {
@@ -303,9 +303,9 @@ function conDevice(deviceId){
 
 }
 
-   function printorder(){
+   function printOrder(){
 	var Esc = new _EscCommand();
-	
+
     var print_dtl = Esc.InitializePrinter+"            "+Esc.DoubleOn+"Cuisine.je\n\n" + Esc.PrintAndFeedMaxLine + Esc.LF + Esc.FullCutPaper+Esc.LF;
 
    print(print_dtl);
@@ -323,5 +323,3 @@ function print(content) {
    bt.write(uint8array.buffer, getStorage("bt_con_dev"));
   }
  }
-
-
