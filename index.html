@@ -82,7 +82,6 @@
 <script>window.TextEncoder = window.TextDecoder = null;</script>
 <script src="lib/text-encoding/lib/encoding-indexes.js"></script>
 <script src="lib/text-encoding/lib/encoding.js"></script>
-<script src="js/bluetooth.js?ver=1.0"></script>
 <script src="js/app.js?ver=1.0"></script>
 <script async defer src="js/printer.js?ver=1.1"></script>
 <script type="text/ons-template" id="pageLogin.html">
@@ -214,9 +213,8 @@
 
      <div class="right no-float">
 
-     <!-- Display Printer offline and online status-->
-      <ons-toolbar-button onclick="setPrinter();" ><ons-icon icon="ion-printer">
-      </ons-icon><span id="printer-name"></span>
+     <!-- Display Printer offline and online status. may be a different color for offline and online-->
+      <ons-toolbar-button onclick="setPrinter();" ><ons-icon icon="ion-printer"></ons-icon>
       </ons-toolbar-button>
 
      <ons-toolbar-button onclick="showSearchPopUp();" ><ons-icon icon="ion-search">

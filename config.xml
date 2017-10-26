@@ -2,7 +2,7 @@
 <widget xmlns = "http://www.w3.org/ns/widgets"
     xmlns:gap = "http://phonegap.com/ns/1.0"
     xmlns:android = "http://schemas.android.com/apk/res/android"
-    id        = "com.cuisine.je.foodappmerchant"
+    id        = "com.cuisine.je.restaurant.manager"
     version   = "1.2">
     <name>Cuisine Restaurant Manager</name>
     <description>
@@ -41,7 +41,7 @@
 	<gap:plugin name="cordova-plugin-media" source="npm" />
 	<gap:plugin name="cordova-plugin-x-toast" source="npm" />	
 	<gap:plugin name="cordova-plugin-buildinfo" source="npm" />	
-	<plugin name="cordova-plugin-bluetooth-serial" spec="~0.4.6"/>
+	<plugin name="cordova-plugin-bluetooth-serial" spec="~0.4.7"/>
     <plugin name="cordova-plugin-ble-central" spec="~1.1.4">
      <variable name="BLUETOOTH_USAGE_DESCRIPTION" value="Your description here"/>
     </plugin>

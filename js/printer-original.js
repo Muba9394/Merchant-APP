@@ -37,55 +37,7 @@
     }
    
 
-    //startScan() author: Raj Kovi 22.10.17
-  /*  this.startScan = function () {
-      
-      var d = [];
-      var dups = [];
-
-      if (getStorage("device_platform") == "Android") {
-
-          bluetoothSerial.discoverUnpaired(function (devices) {
-              d.push(devices);
-              //$("#con_devices").append('<ons-list-item modifier="tappable" onclick="conDevice('+devices.id+');">'+devices.name+'</ons-list-item>');
-          }, function (error) {
-              d = error;
-          });
-
-
-          bluetoothSerial.setDeviceDiscoveredListener(function (device) {
-              d.push(device);
-              
-          });
-
-          
-          var arr = d.filter(function(el) {
-            // If it is not a duplicate, return true
-            if (dups.indexOf(el.id) == -1) {
-              dups.push(el.id);
-              return true;
-            }
-          
-            return false;
-            
-          });
-
-          var html = '';
-          
-          
-          for (var i = 0, len = dups.length; i < len; i++) {
-              html += '<li onclick="conDevice(\'' + dups[i].id + '\');" style="padding:10px;">' + dups[i].name + '</li>';
-          }
-          
-          setStorage("device_list", html);
-         
-      }
-
-      //  alert(getStorage('device_list'));
-
-      return dups;
-  }
-*/   
+   
     this.startScan = function () {
 		var html = '';
       var d = new Array;

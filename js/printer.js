@@ -1,3 +1,137 @@
+var bluetooth = function ($q, $window) {
+    var _this = this;
+
+    this.isEnabled = function () {
+        var d = '';
+        function successCallback(success) {
+            d = true;
+        }
+        function errorCallback(error) {
+            d = false;
+        }
+        if (getStorage("device_platform") == "Android") {
+            bluetoothSerial.isEnabled(successCallback, errorCallback);
+        }
+
+        return d;
+    }
+
+    //enable bluetooth
+    this.enable = function () {
+        var d = '';
+        if (getStorage("device_platform") == "Android") {
+            bluetoothSerial.enable(function (success) {
+                d = success;
+            }, function (error) {
+                d = error;
+            })
+        }
+        return d;
+    }
+
+   
+
+    this.startScan = function () {
+	  var html = '';
+      var d = [];
+      if (getStorage("device_platform") == "IOS") {
+        ble.startScan([], function (device) {
+          d = device;
+        }, function (error) {
+          d =error;
+        });
+      } else if (getStorage("device_platform") == "Android") {
+        bluetoothSerial.setDeviceDiscoveredListener(function (device) {
+          d.push(device);
+          html += '<li onclick="savePrinter(\''+device.id+'\');" style="padding:10px;">'+device.name+'</li>';
+         
+        });
+        bluetoothSerial.discoverUnpaired(function (devices) {
+          d.push(devices);
+		  //$("#con_devices").append('<ons-list-item modifier="tappable" onclick="conDevive('+devices.id+');">'+devices.name+'</ons-list-item>');
+        }, function (error) {
+          d = error;
+        });
+      }
+
+     setTimeout(function() {setStorage("device_list",html)},10000);
+	 //alert(getStorage('device_list'));
+
+      return html;
+    }
+
+
+    //stopScan()
+    this.stopScan = function () {
+        ble.stopScan(null,null);
+        //bluetoothSerial.clearDeviceDiscoveredListener();
+        var d = $q.defer;
+        return d.promise;
+    }
+
+    //isConnected()
+    this.isConnected = function (deviceId,$q) {
+        var d = $q.defer();
+        function successCallback(success) {
+            d.resolve(true);
+        }
+        function errorCallback(error) {
+            d.resolve(false);
+        }
+        if (getStorage("device_platform") == "Android") {
+            bluetoothSerial.isConnected(successCallback, errorCallback);
+        }
+        return d.promise;
+    }
+
+    //connect function
+    this.connect = function (deviceId) {
+        var d = '';
+        function successCallback(success) {
+            d='true';
+        }
+        function errorCallback(error) {
+            d='false';
+        }
+        // without bond
+        bluetoothSerial.connectInsecure(deviceId, successCallback, errorCallback);
+
+        return d;
+    }
+
+    //disconnect function
+    this.disconnect = function (deviceId, $q) {
+        var d = $q.defer();
+        function successCallback(success) {
+            d.resolve(success);
+        }
+        function errorCallback(error) {
+            d.reject(error);
+        }
+        if (getStorage("device_platform") == "Android") {
+            $window.bluetoothSerial.disconnect(successCallback, errorCallback);
+        }
+        return d.promise;
+    }
+
+    //write function
+    this.write = function (buffer, deviceId) {            
+        var d = '';
+        function successCallback(success) {
+            alert(success);
+            d='true';
+        }
+        function errorCallback(error) {
+            d='false';
+        }
+        if (getStorage("device_platform") == "Android") {
+            bluetoothSerial.write(buffer, successCallback, errorCallback);
+        }
+        return d;
+    }
+};
+ 
+ 
  // Print content object
 
 var _EscCommand = (function () {
@@ -43,21 +177,12 @@ var _EscCommand = (function () {
 
 
 function conDevice(deviceId){
-  alert(deviceId);
 	var bt = new bluetooth(0);
-	if(!bt.isEnabled()){bt.enable(); }
-	setTimeout(function(){bt.connect();},2000);
-	/*if(!bt.isConnected()) {
-		alert("Printer is not connected/paired.");
-		return;
-
-	}*/
-
-	//if(!getStorage("bt_con_dev")){
-    //	bt.connect(deviceId);
-    //$('#popupdevice ons-dialog').hide();
-	//	setStorage("bt_con_dev",deviceId);
+	if(!bt.isEnabled()){bt.enable();}
+  // if(!bt.isConnected()) { //throwing error for $q.defer() as function not defined, hence commented.
+	 bt.connect();
 	//}
+
 	var Esc = new _EscCommand();
 
 	var pound = '\u0023'; //Hexadecimal code for printing £
@@ -162,16 +287,41 @@ function conDevice(deviceId){
 	var kit_dtl = Esc.TextAlignCenter + $("#order-details").children().eq(0).find('.text-right').html()+"\n"+Esc.TextAlignLeft +"Customer Name:"+ $("#order-details").children().eq(1).text()+"\n------- ----------------------- --------\n";
 
 	print_dtl += Esc.InitializePrinter+Esc.DoubleOn+Esc.TextAlignCenter+"Kitchen COPY\n" + Esc.DoubleOff +kit_dtl + kit_copy +"\n\n"+ Esc.PrintAndFeedMaxLine + Esc.LF + Esc.FullCutPaper+Esc.LF;
-	//setTimeout(function(){
+	//console.log(print_dtl);
+	setTimeout(function(){
 		var uint8array = new TextEncoder('utf-8', { NONSTANDARD_allowLegacyEncoding: true }).encode(print_dtl);
      bt.write(uint8array.buffer, deviceId,1);
-     
 
-  //},2000);
+
+  },2000);
   setTimeout(function(){
   	kloader.show();
   	 var options = {animation: 'none',onTransitionEnd: function() {}};
   	 kNavigator.resetToPage('slidemenu.html',options);
    },2000);
 
+
 }
+
+   function printorder(){
+	var Esc = new _EscCommand();
+	
+    var print_dtl = Esc.InitializePrinter+"            "+Esc.DoubleOn+"Cuisine.je\n\n" + Esc.PrintAndFeedMaxLine + Esc.LF + Esc.FullCutPaper+Esc.LF;
+
+   print(print_dtl);
+
+  // bt.write($("#order-details-item").html(), 'E4:7F:B2:6A:E4:61');
+
+}
+
+function print(content) {
+	var bt = new bluetooth(0);
+  var chk =  bt.connect(getStorage("bt_con_dev"));
+  //console.log("Printer connected?"+chk);
+  if(chk){
+   var uint8array = new TextEncoder('utf-8', { NONSTANDARD_allowLegacyEncoding: true }).encode(content);
+   bt.write(uint8array.buffer, getStorage("bt_con_dev"));
+  }
+ }
+
+

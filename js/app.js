@@ -563,7 +563,8 @@ function callAjax(action,params)
 				case "AcceptOrdes":
 					if(getStorage("bt_con_dev")){
 						conDevice(getStorage("bt_con_dev"));
-					}else{
+					}else{ //Else you can scan the printer with the icon on the home menu and setup the printer. Showing the popup below will not help
+						//You can call the SetPrinter() to configure the printer again from the available devices.
 						$('#popupdevice ul').append(getStorage('device_list'));
 						$('#popupdevice, #popupdevice ons-dialog').show();
 					}
@@ -1758,23 +1759,7 @@ function displayPrice(currency_position, currency ,price)
 	}
 }
 
-//Loading
-
-
-//
-function printOrder(){
-	if(getStorage("bt_con_dev")){
-		alert(getStorage("bt_con_dev"));
-		conDevice(getStorage("bt_con_dev"));
-	}
-	/*else{
-		$('#popupdevice ul').empty().append(getStorage('device_list'));
-		$('#popupdevice, #popupdevice ons-dialog').show();
-		$('#popupdevice ul').empty().append(getStorage('device_list'));
-		//setPrinter();
-	}*/
-}
-
+/*
 function printerStatus()
 {
 	var btPrinter="";
@@ -1786,7 +1771,7 @@ function printerStatus()
 	}
 	$("#printer-name").val(btPrinter);
 	return btPrinter;
-}
+}*/
 
 function setPrinter(){
 	var bt = new bluetooth(0);
@@ -1800,7 +1785,7 @@ function setPrinter(){
 
 	bt.startScan(); // scan the devices and show the popup after 5 seconds
 
-	$('#popupdevice ul').empty().append("<li>Connected:"+connectedPrinter+"</li>"+getStorage("device_list"));
+	$('#popupdevice ul').empty().append("<li>Connected:  "+connectedPrinter+"</li>"+getStorage("device_list"));
 	$('#popupdevice, #popupdevice ons-dialog').show();
 
 
@@ -1809,6 +1794,8 @@ function setPrinter(){
 function savePrinter(printer) {
 	setStorage("bt_con_dev",printer);
 	$('#popupdevice ons-dialog').hide();
+	//do a test printing
+	//printorder(); //just for testing
 
 }
 
